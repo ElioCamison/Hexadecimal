@@ -17,14 +17,8 @@ public class Number {
         this.digit = digit;
     }
 
-
-    public Number add(Number other) {
-        //--o -----------------------------------------
-        StringBuilder sbDigit = new StringBuilder();
-        StringBuilder sbOther = new StringBuilder();
-        //--o -----------------------------------------
-        sbOther.append(other.getDigit());
-
+    //--o Creamos un hashMap con los valores hexadecimales de A - F
+    private Map<Character, Integer> constructionMap(){
         Map<Character,Integer> mapa = new HashMap();
         char lletra = 65;
         for (int i = 10, count = 0; i <= 15; i++, count ++) {
@@ -32,17 +26,41 @@ public class Number {
             mapa.put(lletra, i);
             count = 0;
         }
+        return mapa;
+    }
+
+
+    public Number add(Number other) {
         //--o -----------------------------------------
+        StringBuilder sbDigit = new StringBuilder();
+        StringBuilder sbOther = new StringBuilder();
+        StringBuilder sbResult = new StringBuilder();
+        //--o -----------------------------------------
+        sbDigit.append(this.getDigit());
+        sbOther.append(other.getDigit());
+        //--o -----------------------------------------
+        int valorDigit = 0 ;
+        int valorOther = 0;
+        int result = 0;
         for (int i = 0; i < sbOther.length(); i++) {
-            if(mapa.containsKey(sbOther.charAt(i))){
-                System.out.println("Mapa " + mapa.get(sbOther.charAt(i)));
+            valorDigit = Integer.parseInt(String.valueOf(sbDigit.charAt(i)));
+            if(constructionMap().containsKey(sbOther.charAt(i))) {
+                valorOther =  constructionMap().get(sbOther.charAt(i));
+            } else {
+                valorOther = Integer.parseInt(String.valueOf(sbOther.charAt(i)));
             }
+
+            result = valorDigit + valorOther;
+            if (constructionMap().containsKey(result)){
+                sbResult.append(constructionMap().get(result));
+            } else {
+                sbResult.append(String.valueOf(result));
+            }
+
         }
 
-        StringBuilder rslt = new StringBuilder();
-        //System.out.println(mapa);
-        rslt.append(other.getDigit());
-        Number nb = new Number(rslt.toString());
+        //sbResult.append(other.getDigit());
+        Number nb = new Number(sbResult.toString());
 
         return nb;
     }
